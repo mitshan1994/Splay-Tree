@@ -52,6 +52,16 @@ private:
     
     void Splay(std::shared_ptr<Node> b);
     void DoTraverse(std::shared_ptr<Node>);
+
+    // helper
+    // return the same contents of the Node
+    std::shared_ptr<Node> MakeSameNode(std::shared_ptr<Node>);
+
+    // return a same tree (you create it)
+    std::shared_ptr<Node> MakeSameSubTree(std::shared_ptr<Node>);
+
+    // find the max value of a subtree, return the node pointer
+    std::shared_ptr<Node> FindMax(std::shared_ptr<Node>);
 };
 
 
@@ -112,7 +122,10 @@ SplayTree<T>::SplayTree(const SplayTree &rhs)
 template <typename T>
 SplayTree<T>::SplayTree(SplayTree &&rhs)
 {
-
+    if (root_ == rhs.root_)  // same tree
+        return;
+    root_ = rhs.root_;
+    rhs.root_ = nullptr;
 }
 
 template <typename T>
@@ -247,4 +260,53 @@ bool SplayTree<T>::Find(const T &val)
         return false;
     Splay(cur_pos);
     return true;
+}
+
+template <typename T>
+std::shared_ptr<typename SplayTree<T>::Node>
+SplayTree<T>::MakeSameNode(std::shared_ptr<Node> old)
+{
+    if (old == nullptr)
+        return nullptr;
+    auto new_node = std::make_shared<Node>(*old);
+    return new_node;
+}
+
+template <typename T>
+std::shared_ptr<typename SplayTree<T>::Node>
+SplayTree<T>::MakeSameSubTree(std::shared_ptr<Node> old)
+{
+    if (nullptr == old)
+        return nullptr;
+    // YOUR CODE HERE (HAVEN'T FINISHED)
+    // DIFFICULTY: make node parent correct
+}
+
+template <typename T>
+bool SplayTree<T>::Delete(const T &val)
+{
+    if (Find(val) == false)
+        return false;
+    auto left_max = FindMax(root_->left);
+    if (nullptr == left_max) {
+        // 使用智能指针,这里应该会自动释放需要删除的节点
+        root_ = root_->right;
+        root_->parent = nullptr;
+        return true;
+    }
+    auto to_delete = root_;
+    // TODO HERE
+    
+    return false;
+}
+
+template <typename T>
+std::shared_ptr<typename SplayTree<T>::Node>
+SplayTree<T>::FindMax(std::shared_ptr<Node> subtree)
+{
+    if (nullptr == subtree)  // empty subtree
+        return nullptr;
+    while (subtree->right != nullptr)
+        subtree = subtree->right;
+    return subtree;
 }

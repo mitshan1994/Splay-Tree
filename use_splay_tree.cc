@@ -20,6 +20,8 @@ int main()
     cout << st2.Find(2);
     cout << st2.Find(6);
     cout << st2.Find(3);
+    st2.Insert(6);
+    cout << st2.Find(6);
 
     // SplayTree<int> st3({1, 3, 2, 5, 4});
     // st3.InOrderTraverse();
